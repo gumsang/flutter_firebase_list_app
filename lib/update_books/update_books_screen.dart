@@ -73,28 +73,42 @@ class _UpdateBookScreenState extends State<UpdateBookScreen> {
                   hintText: widget.document['author'],
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  // 에러가 날 것 같은 코드
-                  viewModel
-                      .updateBook(
-                        document: widget.document,
-                        title: _titleTextController.text,
-                        author: _authorTextController.text,
-                        bytes: _bytes,
-                      )
-                      .then((_) => Navigator.pop(context))
-                      .catchError((e) {
-                    // 에러가 났을 때
-                    final snackBar = SnackBar(
-                      content: Text(e.toString()),
-                    );
-                    print(e);
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  });
-                },
-                child: const Text('도서 수정'),
-              )
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      // 에러가 날 것 같은 코드
+                      viewModel
+                          .updateBook(
+                            document: widget.document,
+                            title: _titleTextController.text,
+                            author: _authorTextController.text,
+                            bytes: _bytes,
+                          )
+                          .then((_) => Navigator.pop(context))
+                          .catchError((e) {
+                        // 에러가 났을 때
+                        final snackBar = SnackBar(
+                          content: Text(e.toString()),
+                        );
+                        print(e);
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      });
+                    },
+                    child: const Text('도서 수정'),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('수정 취소'),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
