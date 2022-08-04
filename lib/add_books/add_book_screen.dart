@@ -15,14 +15,14 @@ class _AddBookScreenState extends State<AddBookScreen> {
   final titleTextController = TextEditingController();
   final authorTextController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
-
+  final AddBookViewModel viewModel = AddBookViewModel();
   Uint8List? _bytes;
 
   @override
   void dispose() {
     titleTextController.dispose();
     authorTextController.dispose();
-    // TODO: implement dispose
+
     super.dispose();
   }
 
@@ -67,17 +67,63 @@ class _AddBookScreenState extends State<AddBookScreen> {
                 hintText: '저자',
               ),
             ),
+
+            //ShowDialog로 빈칸방지
             ElevatedButton(
               onPressed: () {
-                AddBookViewModel().addBook(
+                if (titleTextController.text.isNotEmpty &&
+                    authorTextController.text.isNotEmpty &&
+                    _bytes != null) {
+                  viewModel.addBook(
+                    title: titleTextController.text,
+                    author: authorTextController.text,
+                    bytes: _bytes,
+                  );
+                  Navigator.pop(context);
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('에러!'),
+                      content: const Text('표지,제목,저자를 입력하세요'),
+                      actions: [
+                        ElevatedButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('넵')),
+                        ElevatedButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('넵')),
+                      ],
+                    ),
+                  );
+                }
+              },
+              child: const Text('도서 추가'),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+
+            //에러 캐치로 스낵바 생성....안됨
+            ElevatedButton(
+              onPressed: () {
+                AddBookViewModel()
+                    .addBook(
                   title: titleTextController.text,
                   author: authorTextController.text,
                   bytes: _bytes,
-                );
-                Navigator.pop(context);
+                )
+                    .then((_) {
+                  Navigator.pop(context);
+                }).catchError((e) {
+                  final snackBar = SnackBar(
+                    content: Text(e.toString()),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                });
               },
-              child: const Text('도서 추가'),
-            )
+              child: const Text('도서 추가 캐치에러 동작안함'),
+            ),
           ],
         ),
       ),

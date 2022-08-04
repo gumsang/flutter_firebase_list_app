@@ -27,8 +27,8 @@ class BookListScreen extends StatelessWidget {
 
           return ListView(
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              // Map<String, dynamic> data =
-              //     document.data()! as Map<String, dynamic>;
+              Map<String, dynamic> data =
+                  document.data()! as Map<String, dynamic>;
               return Dismissible(
                 onDismissed: (_) {
                   viewModel.deleteBook(document: document);
@@ -47,10 +47,10 @@ class BookListScreen extends StatelessWidget {
                           builder: (context) => UpdateBookScreen(document)),
                     );
                   },
-                  title: Text(document['title']),
-                  subtitle: Text(document['author']),
+                  title: Text(data['title']),
+                  subtitle: Text(data['author']),
                   leading: Image.network(
-                    document['imageUrl'],
+                    data['imageUrl'],
                     width: 100,
                     height: 100,
                   ),
@@ -65,7 +65,7 @@ class BookListScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddBookScreen(),
+              builder: (context) => const AddBookScreen(),
             ),
           );
         },

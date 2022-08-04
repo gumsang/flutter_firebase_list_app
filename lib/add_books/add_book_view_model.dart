@@ -22,13 +22,27 @@ class AddBookViewModel {
     required String author,
     required Uint8List? bytes,
   }) async {
+    bool isValid = title.isNotEmpty && author.isNotEmpty && bytes != null;
     final doc = _db.collection('books').doc();
-    String downloadUrl = await uploadImage(doc.id, bytes!);
-
-    await _db.collection('books').doc(doc.id).set({
-      "title": title,
-      "author": author,
-      "imageUrl": downloadUrl,
-    });
+    if (isValid) {
+      String downloadUrl = await uploadImage(doc.id, bytes);
+      await _db.collection('books').doc(doc.id).set({
+        "title": title,
+        "author": author,
+        "imageUrl": downloadUrl,
+      });
+    } else if (author.isEmpty && title.isEmpty) {
+      Future.error('제목과 저자를 입력해 주세요');
+    } else if (author.isEmpty && bytes == null) {
+      Future.error('저자와 책표지를 입력해 주세요');
+    } else if (title.isEmpty && bytes == null) {
+      Future.error('제목과 책표지를 입력해 주세요');
+    } else if (title.isEmpty) {
+      Future.error('제목을 입력해 주세요');
+    } else if (author.isEmpty) {
+      Future.error('저자를 입력해 주세요');
+    } else {
+      Future.error('모두 입력해 주세요');
+    }
   }
 }

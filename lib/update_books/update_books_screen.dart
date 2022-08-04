@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_book_list/add_books/add_book_view_model.dart';
 import 'package:flutter_book_list/update_books/update_books_view_model.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -15,28 +14,23 @@ class UpdateBookScreen extends StatefulWidget {
 }
 
 class _UpdateBookScreenState extends State<UpdateBookScreen> {
-  final titleTextController = TextEditingController();
-  final authorTextController = TextEditingController();
-  Map<String, dynamic> data = {};
+  final _titleTextController = TextEditingController();
+  final _authorTextController = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
+  final viewModel = UpdateBookViewModel();
 
   Uint8List? _bytes;
 
   @override
   void initState() {
-    // TODO: implement initState
-    titleTextController.text = widget.document['title'];
-    authorTextController.text = widget.document['author'];
-    data = widget.document.data()! as Map<String, dynamic>;
     super.initState();
   }
 
   @override
   void dispose() {
-    titleTextController.dispose();
-    authorTextController.dispose();
-    // TODO: implement dispose
+    _titleTextController.dispose();
+    _authorTextController.dispose();
     super.dispose();
   }
 
@@ -68,26 +62,38 @@ class _UpdateBookScreenState extends State<UpdateBookScreen> {
                     : Image.memory(_bytes!, width: 200, height: 200),
               ),
               TextField(
-                controller: titleTextController,
-                decoration: const InputDecoration(
-                  hintText: '제목',
+                controller: _titleTextController,
+                decoration: InputDecoration(
+                  hintText: widget.document['title'],
                 ),
               ),
               TextField(
-                controller: authorTextController,
-                decoration: const InputDecoration(
-                  hintText: '저자',
+                controller: _authorTextController,
+                decoration: InputDecoration(
+                  hintText: widget.document['author'],
                 ),
               ),
               ElevatedButton(
                 onPressed: () {
-                  UpdateBookViewModel().updateBook(
-                    document: widget.document,
-                    title: titleTextController.text,
-                    author: authorTextController.text,
-                    bytes: _bytes,
-                  );
-                  Navigator.pop(context);
+                  try {
+                    // 에러가 날 것 같은 코드
+                    viewModel.updateBook(
+                      document: widget.document,
+                      title: _titleTextController.text,
+                      author: _authorTextController.text,
+                      bytes: _bytes,
+                    );
+                    Navigator.pop(context);
+                  } on Exception catch (e) {
+                    // 에러가 났을 때
+                    final snackBar = SnackBar(
+                      content: Text(e.toString()),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } finally {
+                    // (옵션)
+                    // 에러가 나거나, 안 나거나 무조건 마지막에 수행되는 블럭
+                  }
                 },
                 child: const Text('도서 수정'),
               )
