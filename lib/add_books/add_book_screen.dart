@@ -103,8 +103,6 @@ class _AddBookScreenState extends State<AddBookScreen> {
             const SizedBox(
               height: 20,
             ),
-
-            //에러 캐치로 스낵바 생성....안됨
             ElevatedButton(
               onPressed: () {
                 AddBookViewModel()
@@ -122,7 +120,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 });
               },
-              child: const Text('도서 추가 캐치에러 동작안함'),
+              child: const Text('도서 추가 캐치에러 스낵바'),
             ),
           ],
         ),

@@ -32,17 +32,17 @@ class AddBookViewModel {
         "imageUrl": downloadUrl,
       });
     } else if (author.isEmpty && title.isEmpty) {
-      Future.error('제목과 저자를 입력해 주세요');
+      return Future.error('제목과 저자를 입력해 주세요');
     } else if (author.isEmpty && bytes == null) {
-      Future.error('저자와 책표지를 입력해 주세요');
+      return Future.error('저자와 책표지를 입력해 주세요');
     } else if (title.isEmpty && bytes == null) {
-      Future.error('제목과 책표지를 입력해 주세요');
+      return Future.error('제목과 책표지를 입력해 주세요');
     } else if (title.isEmpty) {
-      Future.error('제목을 입력해 주세요');
+      return Future.error('제목을 입력해 주세요');
     } else if (author.isEmpty) {
-      Future.error('저자를 입력해 주세요');
+      return Future.error('저자를 입력해 주세요');
     } else {
-      Future.error('모두 입력해 주세요');
+      return Future.error('모두 입력해 주세요');
     }
   }
 }
