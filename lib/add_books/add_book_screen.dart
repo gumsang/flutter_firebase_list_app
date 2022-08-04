@@ -52,6 +52,21 @@ class _AddBookScreenState extends State<AddBookScreen> {
                       width: 200,
                       height: 200,
                       color: Colors.grey,
+                      child: Center(
+                          child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const [
+                          Icon(
+                            Icons.upload_file_rounded,
+                            size: 100,
+                          ),
+                          Text(
+                            "표지 업로드",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      )),
                     )
                   : Image.memory(_bytes!, width: 200, height: 200),
             ),
