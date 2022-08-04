@@ -32,51 +32,54 @@ class _AddBookScreenState extends State<AddBookScreen> {
       appBar: AppBar(
         title: const Text('도서 추가'),
       ),
-      body: Column(
-        children: [
-          GestureDetector(
-            onTap: () async {
-              XFile? image =
-                  await _picker.pickImage(source: ImageSource.gallery);
-              if (image != null) {
-                // byte array
-                _bytes = await image.readAsBytes();
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () async {
+                XFile? image =
+                    await _picker.pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  // byte array
+                  _bytes = await image.readAsBytes();
 
-                setState(() {});
-              }
-            },
-            child: _bytes == null
-                ? Container(
-                    width: 200,
-                    height: 200,
-                    color: Colors.grey,
-                  )
-                : Image.memory(_bytes!, width: 200, height: 200),
-          ),
-          TextField(
-            controller: titleTextController,
-            decoration: const InputDecoration(
-              hintText: '제목',
+                  setState(() {});
+                }
+              },
+              child: _bytes == null
+                  ? Container(
+                      width: 200,
+                      height: 200,
+                      color: Colors.grey,
+                    )
+                  : Image.memory(_bytes!, width: 200, height: 200),
             ),
-          ),
-          TextField(
-            controller: authorTextController,
-            decoration: const InputDecoration(
-              hintText: '저자',
+            TextField(
+              controller: titleTextController,
+              decoration: const InputDecoration(
+                hintText: '제목',
+              ),
             ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          AddBookViewModel().addBook(
-            title: titleTextController.text,
-            author: authorTextController.text,
-            bytes: _bytes,
-          );
-          Navigator.pop(context);
-        },
-        child: const Icon(Icons.done),
+            TextField(
+              controller: authorTextController,
+              decoration: const InputDecoration(
+                hintText: '저자',
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                AddBookViewModel().addBook(
+                  title: titleTextController.text,
+                  author: authorTextController.text,
+                  bytes: _bytes,
+                );
+                Navigator.pop(context);
+              },
+              child: const Text('도서 추가'),
+            )
+          ],
+        ),
       ),
     );
   }
