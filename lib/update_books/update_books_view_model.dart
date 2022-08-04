@@ -17,32 +17,30 @@ class UpdateBookViewModel {
     return downloadUrl;
   }
 
-  void updateBook({
+  Future updateBook({
     required DocumentSnapshot document,
     required String title,
     required String author,
     required Uint8List? bytes,
   }) async {
-    String downloadUrl = await uploadImage(document.id, bytes!);
-    bool isValid = title.isNotEmpty && author.isNotEmpty;
-    if (isValid) {
-      await _db.collection('books').doc(document.id).set({
+    if (title.isNotEmpty && author.isNotEmpty && bytes == null) {
+      await _db.collection('books').doc(document.id).update({
+        "title": title,
+        "author": author,
+      });
+    } else if (title.isNotEmpty && author.isNotEmpty && bytes != null) {
+      String downloadUrl = await uploadImage(document.id, bytes);
+      await _db.collection('books').doc(document.id).update({
         "title": title,
         "author": author,
         "imageUrl": downloadUrl,
       });
     } else if (author.isEmpty && title.isEmpty) {
-      throw '제목과 저자를 입력해 주세요';
-    } else if (author.isEmpty && downloadUrl.isNotEmpty) {
-      throw '저자와 책표지를 입력해 주세요';
-    } else if (title.isEmpty && downloadUrl.isNotEmpty) {
-      throw '제목과 책표지를 입력해 주세요';
-    } else if (title.isEmpty) {
-      throw '제목을 입력해 주세요';
+      return Future.error('제목과 저자를 입력해 주세요');
     } else if (author.isEmpty) {
-      throw '저자를 입력해 주세요';
-    } else {
-      throw '모두 입력해 주세요';
+      return Future.error('저자를 입력해 주세요');
+    } else if (title.isEmpty) {
+      return Future.error('제목을 입력해 주세요');
     }
   }
 }
