@@ -31,6 +31,8 @@ class AddBookViewModel {
         "author": author,
         "imageUrl": downloadUrl,
       });
+    } else if (author.isEmpty && title.isEmpty && bytes == null) {
+      return Future.error('입력이 없습니다. 모두 입력해주세요');
     } else if (author.isEmpty && title.isEmpty) {
       return Future.error('제목과 저자를 입력해 주세요');
     } else if (author.isEmpty && bytes == null) {
@@ -41,8 +43,6 @@ class AddBookViewModel {
       return Future.error('제목을 입력해 주세요');
     } else if (author.isEmpty) {
       return Future.error('저자를 입력해 주세요');
-    } else {
-      return Future.error('모두 입력해 주세요');
     }
   }
 }
