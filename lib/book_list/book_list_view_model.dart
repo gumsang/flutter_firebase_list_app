@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_book_list/main.dart';
+import 'package:flutter_book_list/model/book.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class BookListViewModel {
@@ -9,7 +10,14 @@ class BookListViewModel {
   final _storage = FirebaseStorage.instance;
   final _googleSignIn = GoogleSignIn();
 
-  Stream<QuerySnapshot> get booksStream => _db.collection("books").snapshots();
+  Stream<QuerySnapshot> get booksStream => _db
+      .collection("books")
+      .withConverter<Book>(
+        fromFirestore: (snapshot, options) => Book.fromJson(snapshot.data()!),
+        toFirestore: (book, options) => book.toJson(),
+      )
+      .snapshots();
+
   Future deleteBook({required DocumentSnapshot document}) async {
     await _db.collection('books').doc(document.id).delete();
     await deleteImage(document.id);
