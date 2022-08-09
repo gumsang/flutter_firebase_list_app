@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_book_list/login/login_view_model.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -51,11 +52,11 @@ class _LoginScreenState extends State<LoginScreen> {
             onPressed: () {},
             child: const Text('신규 등록'),
           ),
-          ElevatedButton(
+          SignInButton(
+            Buttons.Google,
             onPressed: () {
               viewModel.signInWithGoogle();
             },
-            child: const Text('Goggle'),
           ),
         ],
       ),
