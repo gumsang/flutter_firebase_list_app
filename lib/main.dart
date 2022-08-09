@@ -4,6 +4,8 @@ import 'package:flutter_book_list/root/root_screen.dart';
 import 'firebase_options.dart';
 import 'book_list/book_list_screen.dart';
 
+bool isGoogle = false;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

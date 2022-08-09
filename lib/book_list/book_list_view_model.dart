@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_book_list/main.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class BookListViewModel {
@@ -21,8 +22,9 @@ class BookListViewModel {
   }
 
   void logout() async {
-    await _googleSignIn.signOut();
+    if (isGoogle) {
+      await _googleSignIn.signOut();
+    }
     await FirebaseAuth.instance.signOut();
-    // google signOut
   }
 }

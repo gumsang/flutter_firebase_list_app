@@ -44,13 +44,19 @@ class _LoginScreenState extends State<LoginScreen> {
               labelText: '패스워드',
             ),
           ),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text('로그인'),
+          SignInButton(
+            Buttons.Email,
+            onPressed: () {
+              viewModel.signInWithEmailAndPassword(
+                  _emailTextController.text, _passwordTextController.text);
+            },
           ),
-          TextButton(
-            onPressed: () {},
-            child: const Text('신규 등록'),
+          ElevatedButton(
+            child: const Text('신규등록'),
+            onPressed: () {
+              viewModel.createUserWithEmailAndPassword(
+                  _emailTextController.text, _passwordTextController.text);
+            },
           ),
           SignInButton(
             Buttons.Google,
