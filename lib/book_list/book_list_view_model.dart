@@ -24,6 +24,7 @@ class BookListViewModel {
   void logout() async {
     if (isGoogle) {
       await _googleSignIn.signOut();
+      isGoogle = !isGoogle;
     }
     await FirebaseAuth.instance.signOut();
   }
